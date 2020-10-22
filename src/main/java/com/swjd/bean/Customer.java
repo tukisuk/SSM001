@@ -18,6 +18,17 @@ public class Customer {
     private String customerAddress;
     private String customerDate;
 
+    //批量删除
+    private String[] selectCustomerId;
+
+    public String[] getSelectCustomerId() {
+        return selectCustomerId;
+    }
+
+    public void setSelectCustomerId(String[] selectCustomerIds) {
+        this.selectCustomerId = selectCustomerIds;
+    }
+
     public Customer() {
     }
 

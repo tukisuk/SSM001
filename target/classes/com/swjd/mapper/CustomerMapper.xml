@@ -18,4 +18,79 @@
         FROM
         customer c
     </select>
+
+    <select id="findForSearch" resultType="Customer">
+            SELECT
+        c.customerId,
+        c.customerName,
+        c.customerUserId,
+        (SELECT u.realname FROM `user` u where u.uid=c.customerUserId) as customerUserName,
+        c.customerCreateId,
+        c.customerSourse,
+        (SELECT d.dictItemName FROM dict d WHERE d.dictType='002'
+        AND dictItemCode=c.customerSourse) as customerSourseDict,
+        c.customerIndustry,
+        (SELECT d.dictItemName FROM dict d WHERE d.dictItemCode=c.customerIndustry) as customerIndustryDict
+        ,c.customerPhone,c.customerAddress,c.customerDate
+        FROM
+        customer c
+        where 1=1
+        <if test="map.customerId!=null and map.customerId!=''">
+            and customerId=#{map.customerId}
+        </if>
+        <if test="map.customerName!=null and map.customerName!=''">
+            and customerName like concat('%',#{map.customerName},'%')
+        </if>
+        <if test="map.customerSourse!=null and map.customerSourse!=''">
+            and customerSourse=#{map.customerSourse}
+        </if>
+        <if test="map.customerDateBegin!=null and map.customerDateBegin!=''">
+            and customerDate>=#{map.customerDateBegin}
+        </if>
+        <if test="map.customerDateEnd!=null and map.customerDateEnd!=''">
+            <![CDATA[and customerDate<=#{map.customerDateEnd}]]>
+        </if>
+        order by customerDate DESC
+        limit #{page},#{rows}
+    </select>
+
+    <select id="findForCount" resultType="java.lang.Integer">
+        select count(*) from customer
+        where 1=1
+        <if test="map.customerId!=null and map.customerId!=''">
+            and customerId=#{map.customerId}
+        </if>
+        <if test="map.customerName!=null and map.customerName!=''">
+            and customerName like concat('%',#{map.customerName},'%')
+        </if>
+        <if test="map.customerSourse!=null and map.customerSourse!=''">
+            and customerSourse=#{map.customerSourse}
+        </if>
+        <if test="map.customerDateBegin!=null and map.customerDateBegin!=''">
+            and customerDate>=#{map.customerDateBegin}
+        </if>
+        <if test="map.customerDateEnd!=null and map.customerDateEnd!=''">
+            <![CDATA[and customerDate<=#{map.customerDateEnd}]]>
+        </if>
+    </select>
+    <insert id="addCourse">
+        insert into customer values (null,#{customerName},#{customerUserId},#{customerCreateId},#{customerSourse},#{customerIndustry},#{StringcustomerPhone},#{customerAddress},#{customerDate})
+    </insert>
+
+    <delete id="delete">
+        delete from customer
+        where customerId in
+        <foreach collection="array" item="id"  open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectone" resultType="Customer">
+        SELECT* from customer where customerId=#{customerId}
+    </select>
+
+    <update id="updateCourse">
+        update customer set customerName=#{customerName},customerUserId=#{customerUserId},customerCreateId=#{customerCreateId},customerSourse=#{customerSourse},customerIndustry=#{customerIndustry},
+        customerPhone=#{StringcustomerPhone},customerAddress=#{customerAddress},customerDate=#{customerDate} where customerId=#{customerId}
+    </update>
 </mapper>

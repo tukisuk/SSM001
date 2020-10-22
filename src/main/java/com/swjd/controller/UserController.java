@@ -31,7 +31,7 @@ public class UserController {
             if (u.getFlag().equals("1")){
                 //登入成功把用户名存到session
                 session.setAttribute("activeName",u.getUname());
-                return "redirect:/CustomerController/tomain";
+                return "redirect:/CustomerController/findForSearch";
             }else {
                 //账号是禁用状态
                 model.addAttribute("user",user);

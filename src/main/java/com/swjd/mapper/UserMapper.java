@@ -4,4 +4,6 @@ import com.swjd.bean.User;
 
 public interface UserMapper {
     public abstract User findUserByUnamePwd(User user);
+    //根据登入名查询id
+    public abstract int findUserId(String userName);
 }
